@@ -5,56 +5,12 @@ import { Checkbox, CheckboxChangeEvent } from "primereact/checkbox";
 import { Button } from "primereact/button";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
 import "./App.css";
-import { Status, todoType } from "./types/todoType";
+import { todoType } from "./types/todoType";
+import todoApi from "./services/todoService";
 
 function App() {
-  let emptyTodo: todoType = {
-    title: "",
-    author: "",
-    status: { type: "OUT_DATED", color: "#ffc107" },
-  };
-  const toDos: todoType[] = [
-    {
-      title: "Call Sam For payments",
-      author: "Bob",
-      status: { type: "DONE", color: "#28a745" },
-    },
-    {
-      title: "Make payment to Bluedart",
-      author: "Johnny",
-      status: { type: "ON_PROGRESS", color: "#007bff" },
-    },
-    {
-      title: "Office rent",
-      author: "Samino",
-      status: { type: "OUT_DATED", color: "#ffc107" },
-    },
-    {
-      title: "Office grocery",
-      author: "Tida",
-      status: { type: "DONE", color: "#28a745" },
-    },
-    {
-      title: "Ask for Lunch to Clients",
-      author: "Office Admin",
-      status: { type: "DONE", color: "#28a745" },
-    },
-    {
-      title: "Client Meeting at 11 AM",
-      author: "CEO",
-      status: { type: "ON_PROGRESS", color: "#007bff" },
-    },
-    {
-      title: "Client Meeting at 11 AM",
-      author: "CEO",
-      status: { type: "OUT_DATED", color: "#ffc107" },
-    },
-    {
-      title: "Client Meeting at 11 AM",
-      author: "CEO",
-      status: { type: "ON_PROGRESS", color: "#007bff" },
-    },
-  ];
+  const [todos, setTodos] = useState<todoType[]>([]);
+
   const [selectedTodo, setSelectedTodo] = useState<todoType[]>([]);
   useEffect(() => {
     WebFont.load({
@@ -62,7 +18,16 @@ function App() {
         families: ["Roboto"],
       },
     });
-  });
+    todoApi
+      .getAllTodos()
+      .then((res) => {
+        console.log(res.data);
+        setTodos(res?.data ?? []);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   const onTodoChange = (e: CheckboxChangeEvent) => {
     let selectedTodos = [...selectedTodo];
@@ -81,7 +46,7 @@ function App() {
         Lists
       </div>
       <div className="to-do-list">
-        {toDos.map((todo, index) => (
+        {todos.map((todo, index) => (
           <div key={index} className="list-item">
             <div
               className="head-warning"

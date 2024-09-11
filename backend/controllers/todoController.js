@@ -15,7 +15,7 @@ const getAll = async (req, res) => {
 // Get one todo
 const getOne = async (req, res) => {
     const {id} = req.params;
-    if (!mongoose.Types.ObjectId.isValid(id)) {
+    if (!mongoose.statusTypes.ObjectId.isValid(id)) {
         res.status(404).json({msg: `${id} is not valid`})
     }
     try {
@@ -32,38 +32,46 @@ const getOne = async (req, res) => {
 // Add todo lists
 const addTodos = async (req, res) => {
     const docs = [
-        {
-            title: "Call Sam For payments",
-            author: "Bob",            
-          },
-          {
-            title: "Make payment to Bluedart",
-            author: "Johnny",            
-          },
-          {
-            title: "Office rent",
-            author: "Samino",            
-          },
-          {
-            title: "Office grocery",
-            author: "Tida",            
-          },
-          {
-            title: "Ask for Lunch to Clients",
-            author: "Office Admin",            
-          },
-          {
-            title: "Client Meeting at 11 AM",
-            author: "CEO",            
-          },
-          {
-            title: "Client Meeting at 11 AM",
-            author: "CEO",            
-          },
-          {
-            title: "Client Meeting at 11 AM",
-            author: "CEO",            
-          },
+      {
+        title: "Call Sam For payments",
+        author: "Bob",
+        status: { statusType: "DONE", color: "#28a745" },
+      },
+      {
+        title: "Make payment to Bluedart",
+        author: "Johnny",
+        status: { statusType: "ON_PROGRESS", color: "#007bff" },
+      },
+      {
+        title: "Office rent",
+        author: "Samino",
+        status: { statusType: "OUT_DATED", color: "#ffc107" },
+      },
+      {
+        title: "Office grocery",
+        author: "Tida",
+        status: { statusType: "DONE", color: "#28a745" },
+      },
+      {
+        title: "Ask for Lunch to Clients",
+        author: "Office Admin",
+        status: { statusType: "DONE", color: "#28a745" },
+      },
+      {
+        title: "Client Meeting at 11 AM",
+        author: "CEO",
+        status: { statusType: "ON_PROGRESS", color: "#007bff" },
+      },
+      {
+        title: "Client Meeting at 11 AM",
+        author: "CEO",
+        status: { statusType: "OUT_DATED", color: "#ffc107" },
+      },
+      {
+        title: "Client Meeting at 11 AM",
+        author: "CEO",
+        status: { statusType: "ON_PROGRESS", color: "#007bff" },
+      },
     ]
     try {
         const result = await todoModel.insertMany(docs, {ordered: true})

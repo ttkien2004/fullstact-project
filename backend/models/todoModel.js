@@ -12,7 +12,8 @@ const todoSchema = new Schema({
         required: true
     },
     status: {
-        type: String,
+        statusType: String,
+        color: String
     }
 }, {timeStamps: true})
 

@@ -4,6 +4,6 @@ export interface todoType {
     status?: Status;
 }
 export type Status = 
-| {type: "DONE", color: "#28a745"}
-| {type: "ON_PROGRESS", color: "#007bff"}
-| {type: "OUT_DATED", color: "#ffc107"}
+| {statusType: "DONE", color: "#28a745"}
+| {statusType: "ON_PROGRESS", color: "#007bff"}
+| {statusType: "OUT_DATED", color: "#ffc107"}
