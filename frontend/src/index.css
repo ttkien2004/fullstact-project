@@ -72,21 +72,35 @@ body{
   justify-content: end;
 }
 
-.list-item {
-  /* border: 1px solid red; */
+.list-item {  
   border: 1px solid rgb(234, 234, 234);
-  height: 50px;
+  height: 50px;    
   display: flex;
-  align-items: center;  
+  align-items: center;    
   position: relative;
+  padding-left: 20px;
 }
 .to-do-list {
   /* border: 1px solid red; */
   /* overflow-y: hidden; */
-  overflow-y: scroll;
+  overflow-y: scroll;    
 } 
 
 .btn-container {
   position: absolute;
   right: 0;
+}
+.title-name-container {
+  display: flex;
+  flex-direction: column;
+  /* border: 1px solid red; */
+  margin-left: 10px;
+  width: 200px;
+}
+.to-do-list::-webkit-scrollbar {  
+  width: 7px;  
+  background-color: #aaa; /* or add it to the track */
+}
+.to-do-list::-webkit-scrollbar-thumb {    
+  background-color: #007bff; /* or add it to the track */
 }
