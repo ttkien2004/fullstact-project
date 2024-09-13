@@ -9,7 +9,7 @@ router.get('/getOne/:id', getOne)
 // Create new todo
 router.post('/create', createTodo)
 // Delete a todo
-router.delete('/delete/:id', deleteTodo)
+router.delete('/delete', deleteTodo)
 // Update a todo
 router.patch('/update/:id', updateTodo)
 // Add multiple todos

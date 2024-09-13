@@ -23,7 +23,7 @@ const todoApi = {
     },
     getOneTodo: async (id: string): Promise<ApiResponse<todoType>> => {
         try {
-            const response = await axios.get(`${url}/getOne`)
+            const response = await axios.get(`${url}/getOne/${id}`)
 
             return {
                 data: response.data
@@ -47,9 +47,13 @@ const todoApi = {
             throw err
         }
     },
-    deleteTodo: async (id: string): Promise<ApiResponse<todoType[]>> => {
+    deleteTodo: async (title: string, author: string, status: Status): Promise<ApiResponse<todoType>> => {
         try {
-            const response = await axios.delete(`${url}/delete/${id}`)
+            const response = await axios.delete(`${url}/delete`, {
+                data: {
+                    title, author, status
+                }
+            })
 
             return {
                 data: response.data.data

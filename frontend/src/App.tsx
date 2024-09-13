@@ -11,11 +11,13 @@ import { Dialog } from "primereact/dialog";
 import { InputText } from "primereact/inputtext";
 import { Dropdown } from "primereact/dropdown";
 import "react-toastify/dist/ReactToastify.css";
+import { useTodoContext } from "./hooks/TodoHook";
 
 function App() {
-  const [todos, setTodos] = useState<todoType[]>([]);
+  // const [todos, setTodos] = useState<todoType[]>([]);
   const [title, setTitle] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
+  const { todos, dispatch } = useTodoContext();
   const [todoStatus, setTodoStatus] = useState<Status>({
     statusType: "OUT_DATED",
   });
@@ -48,7 +50,7 @@ function App() {
     todoApi
       .getAllTodos()
       .then((res) => {
-        setTodos(res?.data ?? []);
+        dispatch({ type: "SET_TODO", payload: res.data ?? [] });
       })
       .catch((err) => {
         console.log(err);
@@ -66,10 +68,11 @@ function App() {
   };
   const handleDelete = async (id: string) => {
     try {
-      const res = await todoApi.deleteTodo(id);
+      const res = await todoApi.deleteTodo(title, author, todoStatus);
 
       if (res) {
-        setTodos(res.data ?? []);
+        // setTodos(res.data ?? []);
+        dispatch({ type: "DELETE_TODO", payload: res.data });
         toast.success("Xóa thành công");
         // console.log("Xóa thành công");
       }
@@ -83,9 +86,10 @@ function App() {
       const res = await todoApi.createTodo(title, author, todoStatus);
 
       if (res) {
-        // console.log(res.data);
-        let newTodoList = [res.data, ...todos];
-        setTodos(newTodoList);
+        dispatch({
+          type: "ADD_TODO",
+          payload: { title, author, status: todoStatus },
+        });
         toast.success("Tạo thành công");
       }
     } catch (err) {

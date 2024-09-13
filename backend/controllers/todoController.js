@@ -52,12 +52,15 @@ const updateTodo = async (req, res) => {
 }
 // Delete a todo
 const deleteTodo = async (req, res) => {
-  const { id } = req.params;
-  if (!mongoose.Types.ObjectId.isValid(id)) {
-    res.status(404).json({msg: `${id} is not valid`})
+  // const { id } = req.params;
+  // if (!mongoose.Types.ObjectId.isValid(id)) {
+  //   res.status(404).json({msg: `${id} is not valid`})
+  // }
+  if (!req.body) {
+    res.status(404).json("Could not find todo")
   }
   try {
-    const todoDelete = await todoModel.findByIdAndDelete(id);
+    const todoDelete = await todoModel.findOneAndDelete({...req.body});
 
     res.status({data: todoDelete, message: 'Delete successfully'})
   }catch (err) {    
