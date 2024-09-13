@@ -14,8 +14,11 @@ const todoSchema = new Schema({
     status: {
         statusType: String,
         color: String
+    },
+    createdAt: {
+        type: Date
     }
-}, {timeStamps: true})
+}, {timestamps: true})
 
 module.exports = mongoose.model('todo-lists', todoSchema)
 // module.exports = mongoose.model()

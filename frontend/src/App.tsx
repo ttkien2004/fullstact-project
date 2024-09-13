@@ -4,14 +4,41 @@ import "primeicons/primeicons.css";
 import { Checkbox, CheckboxChangeEvent } from "primereact/checkbox";
 import { Button } from "primereact/button";
 import "primereact/resources/themes/lara-light-cyan/theme.css";
-import "./App.css";
-import { todoType } from "./types/todoType";
+import { Status, todoType } from "./types/todoType";
 import todoApi from "./services/todoService";
+import { toast } from "react-toastify";
+import { Dialog } from "primereact/dialog";
+import { InputText } from "primereact/inputtext";
+import { Dropdown } from "primereact/dropdown";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const [todos, setTodos] = useState<todoType[]>([]);
+  const [title, setTitle] = useState<string>("");
+  const [author, setAuthor] = useState<string>("");
+  const [todoStatus, setTodoStatus] = useState<Status>({
+    statusType: "OUT_DATED",
+  });
+
+  const status: Status[] = [
+    {
+      statusType: "DONE",
+      color: "#28a745",
+    },
+    {
+      statusType: "ON_PROGRESS",
+      color: "#007bff",
+    },
+    {
+      statusType: "OUT_DATED",
+      color: "#ffc107",
+    },
+  ];
 
   const [selectedTodo, setSelectedTodo] = useState<todoType[]>([]);
+  // For dialog
+  const [todoDialog, setTodoDialog] = useState<boolean>(false);
+
   useEffect(() => {
     WebFont.load({
       google: {
@@ -21,7 +48,6 @@ function App() {
     todoApi
       .getAllTodos()
       .then((res) => {
-        console.log(res.data);
         setTodos(res?.data ?? []);
       })
       .catch((err) => {
@@ -38,7 +64,67 @@ function App() {
     }
     setSelectedTodo(selectedTodos);
   };
+  const handleDelete = async (id: string) => {
+    try {
+      const res = await todoApi.deleteTodo(id);
 
+      if (res) {
+        setTodos(res.data ?? []);
+        toast.success("Xóa thành công");
+        // console.log("Xóa thành công");
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error("Xóa thất bại!");
+    }
+  };
+  const handleCreate = async () => {
+    try {
+      const res = await todoApi.createTodo(title, author, todoStatus);
+
+      if (res) {
+        // console.log(res.data);
+        let newTodoList = [res.data, ...todos];
+        setTodos(newTodoList);
+        toast.success("Tạo thành công");
+      }
+    } catch (err) {
+      console.log(err);
+      toast.error("Tạo thất bại");
+    }
+  };
+
+  const hideDialog = () => {
+    setTodoDialog(false);
+  };
+  const TodoDialogFooter = () => {
+    return (
+      <>
+        <Button
+          label="Thêm"
+          severity="success"
+          onClick={() => {
+            // console.log({ title, author, status: todoStatus });
+            handleCreate();
+            setTodoDialog(false);
+          }}
+        ></Button>
+        <Button
+          label="Đóng"
+          onClick={() => setTodoDialog(false)}
+          className="p-button-text"
+        ></Button>
+      </>
+    );
+  };
+  const openNew = () => {
+    setTodoDialog(true);
+    setTitle("");
+    setAuthor("");
+    setTodoStatus({
+      statusType: "OUT_DATED",
+    });
+  };
   return (
     <div className="tasklists">
       <div className="header">
@@ -91,6 +177,7 @@ function App() {
                 rounded
                 outlined
                 text
+                onClick={() => handleDelete(todo._id as string)}
               />
             </div>
           </div>
@@ -98,8 +185,57 @@ function App() {
       </div>
       <div className="footer">
         <span className="cancel-button">Cancel</span>
-        <button className="add-button">Add Task</button>
+        <button className="add-button" onClick={openNew}>
+          Add Task
+        </button>
       </div>
+      <Dialog
+        visible={todoDialog}
+        style={{ width: "450px" }}
+        header={"Thêm mới Todo"}
+        modal
+        className="p-fluid"
+        footer={TodoDialogFooter}
+        onHide={hideDialog}
+      >
+        <div className="field">
+          <label>Title</label>
+          <InputText
+            id="title"
+            placeholder="Nhập title"
+            value={title}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setTitle(e.target.value)
+            }
+            required
+          />
+        </div>
+        <div className="field">
+          <label>Author</label>
+          <InputText
+            id="author"
+            placeholder="Nhập author"
+            value={author}
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
+              setAuthor(e.target.value)
+            }
+            required
+          />
+        </div>
+        <div className="field">
+          <label>Status</label>
+          <Dropdown
+            value={todoStatus}
+            onChange={(e) => {
+              setTodoStatus(e.target.value);
+            }}
+            options={status}
+            optionLabel="statusType"
+            placeholder="Chọn status"
+            required
+          ></Dropdown>
+        </div>
+      </Dialog>
     </div>
   );
 }

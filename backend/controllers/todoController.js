@@ -15,7 +15,7 @@ const getAll = async (req, res) => {
 // Get one todo
 const getOne = async (req, res) => {
     const {id} = req.params;
-    if (!mongoose.statusTypes.ObjectId.isValid(id)) {
+    if (!mongoose.Types.ObjectId.isValid(id)) {
         res.status(404).json({msg: `${id} is not valid`})
     }
     try {
@@ -27,8 +27,43 @@ const getOne = async (req, res) => {
     }
 }
 // Create a todo
+const createTodo = async (req, res) => {
+  try {
+    const newTodo = await todoModel.create({...req.body})
+
+    res.status(200).json({data: newTodo})
+  } catch (err) {    
+    res.status(400).json({msg: 'Can not create new todo'})
+  }
+}
 // Update a todo
+const updateTodo = async (req, res) => {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.status(404).json({msg: `${id} is not valid`})
+  }
+  try {
+    const todoPatch = await todoModel.findByIdAndUpdate(id, req.body);
+    // console.log(req.body)
+    res.status(200).json({todoPatch})
+  }catch (err) {
+    res.status(400).json({msg: `Can not update todo has id: ${id}`})
+  }
+}
 // Delete a todo
+const deleteTodo = async (req, res) => {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    res.status(404).json({msg: `${id} is not valid`})
+  }
+  try {
+    const todoDelete = await todoModel.findByIdAndDelete(id);
+
+    res.status({data: todoDelete, message: 'Delete successfully'})
+  }catch (err) {    
+    res.status(400).json({msg: 'Can not delete todo'});
+  }
+}
 // Add todo lists
 const addTodos = async (req, res) => {
     const docs = [
@@ -85,5 +120,8 @@ const addTodos = async (req, res) => {
 module.exports = {
     getAll,
     getOne,
-    addTodos
+    addTodos,
+    updateTodo,
+    deleteTodo,
+    createTodo
 }
