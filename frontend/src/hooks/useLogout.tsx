@@ -4,15 +4,10 @@ const useLogout = () => {
   const { dispatch } = useAuthContext();
   const logout = () => {
     localStorage.removeItem("user");
+
+    dispatch({ type: "LOGOUT" });
   };
   // dispatch user logout
-  dispatch({
-    type: "LOGOUT",
-    payload: {
-      email: "",
-      token: "",
-    },
-  });
 
   return { logout };
 };

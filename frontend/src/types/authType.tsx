@@ -10,4 +10,4 @@ export interface authUser {
 
 export type authAction =
   | { type: "LOGIN"; payload: authUser }
-  | { type: "LOGOUT"; payload: authUser };
+  | { type: "LOGOUT" };

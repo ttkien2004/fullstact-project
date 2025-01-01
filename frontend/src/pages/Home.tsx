@@ -1,10 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
-import { workoutContextType, workoutType } from "../types/workoutType";
-import axios from "axios";
 import workoutAPI from "../services/workoutAPI";
 import WorkoutDetails from "../components/WorkoutDetails";
 import WorkoutForm from "../components/WorkoutForm";
-import { workoutContext } from "../context/WorkoutContext";
 import { useWorkoutContext } from "../hooks/useWorkoutContext";
 
 export default function Home() {

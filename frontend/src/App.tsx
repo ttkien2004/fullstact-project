@@ -1,5 +1,3 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
@@ -15,11 +13,7 @@ function App() {
         <div className="pages">
           <Routes>
             <Route path="/" element={<Home />} />
-          </Routes>
-          <Routes>
             <Route path="/LoginUser" element={<Login />} />
-          </Routes>
-          <Routes>
             <Route path="/SignupUser" element={<Signup />} />
           </Routes>
         </div>

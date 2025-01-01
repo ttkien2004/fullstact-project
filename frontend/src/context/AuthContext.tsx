@@ -1,5 +1,6 @@
-import React, { createContext, ReducerAction } from "react";
+import React, { createContext } from "react";
 import { authUser, authAction } from "../types/authType";
+import { useEffect } from "react";
 
 interface Props {
   children: React.ReactNode;
@@ -25,6 +26,15 @@ export const authReducer = (state: authUser, action: authAction) => {
 };
 const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
   const [auth, dispatch] = React.useReducer(authReducer, initialAuth);
+
+  useEffect(() => {
+    const user = JSON.parse(localStorage.getItem("user") || "");
+
+    if (user) {
+      console.log(user);
+      dispatch({ type: "LOGIN", payload: user });
+    }
+  }, []);
 
   // console.log("Auth state: ", auth);
   return (

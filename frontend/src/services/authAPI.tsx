@@ -14,13 +14,12 @@ const authApi = {
   ): Promise<ApiResponse<authType>> => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/workouts/login",
+        "http://localhost:3000/api/user/login",
         {
           email: email,
           password: password,
         }
       );
-      console.log(response.data);
       return {
         data: response.data,
       };
@@ -35,7 +34,7 @@ const authApi = {
   ): Promise<ApiResponse<authType>> => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/user/signup",
+        "http://localhost:3000/api/user/signup",
         {
           email: email,
           password: password,
