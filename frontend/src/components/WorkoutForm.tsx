@@ -3,6 +3,7 @@ import { workoutType } from "../types/workoutType";
 import workoutAPI from "../services/workoutAPI";
 import { workoutContext } from "../context/WorkoutContext";
 import { useWorkoutContext } from "../hooks/useWorkoutContext";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 export default function WorkoutForm() {
   let emptyWorkout: workoutType = {
@@ -13,6 +14,7 @@ export default function WorkoutForm() {
     createdAt: "",
   };
   const { dispatch } = useWorkoutContext();
+  const { auth } = useAuthContext();
   const [workout, setWorkout] = useState<workoutType>(emptyWorkout);
   const [error, setError] = useState<boolean>(false);
   const inputChange = (
@@ -26,6 +28,11 @@ export default function WorkoutForm() {
   };
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    if (!auth.token) {
+      setError(true);
+      return;
+    }
     try {
       const response = await workoutAPI.create(workout);
       if (response) {

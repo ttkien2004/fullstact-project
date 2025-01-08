@@ -28,7 +28,7 @@ const AuthContextProvider: React.FC<Props> = ({ children }: Props) => {
   const [auth, dispatch] = React.useReducer(authReducer, initialAuth);
 
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user") || "");
+    const user = JSON.parse(localStorage.getItem("user") || "{}");
 
     if (user) {
       console.log(user);

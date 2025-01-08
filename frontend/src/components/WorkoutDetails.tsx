@@ -3,13 +3,19 @@ import { workoutType } from "../types/workoutType";
 import { workoutContext } from "../context/WorkoutContext";
 import workoutAPI from "../services/workoutAPI";
 import { useWorkoutContext } from "../hooks/useWorkoutContext";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 interface WorkoutDetails {
   workout: workoutType;
 }
 export default function WorkoutDetails({ workout }: WorkoutDetails) {
   const { dispatch } = useWorkoutContext();
+  const { auth } = useAuthContext();
   const handleDelete = async () => {
+    if (!auth.token) {
+      return;
+    }
+
     try {
       const response = await workoutAPI.delete(workout);
       if (response) {

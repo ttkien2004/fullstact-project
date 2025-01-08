@@ -1,5 +1,6 @@
 import { workoutType } from "../types/workoutType";
 import axios from "axios";
+import axiosClient from "../axios/axiosConfig";
 
 export interface ApiResponse<T> {
   status?: number;
@@ -10,7 +11,7 @@ export interface ApiResponse<T> {
 const workoutAPI = {
   getAll: async (): Promise<ApiResponse<workoutType[]>> => {
     try {
-      const response = await axios.get("http://localhost:3000/api/workouts");
+      const response = await axiosClient.get("/api/workouts");
       return {
         data: response.data,
       };
@@ -21,7 +22,7 @@ const workoutAPI = {
   },
   create: async (data: workoutType): Promise<ApiResponse<workoutType>> => {
     try {
-      const response = await axios.post("http://localhost:3000/api/workouts", {
+      const response = await axiosClient.post("/api/workouts", {
         title: data.title,
         load: data.load,
         reps: data.reps,
@@ -35,16 +36,13 @@ const workoutAPI = {
   },
   delete: async (data: workoutType): Promise<ApiResponse<workoutType>> => {
     try {
-      const response = await axios.delete(
-        "http://localhost:3000/api/workouts/delete",
-        {
-          data: {
-            title: data.title,
-            load: data.load,
-            reps: data.reps,
-          },
-        }
-      );
+      const response = await axiosClient.delete("/api/workouts/delete", {
+        data: {
+          title: data.title,
+          load: data.load,
+          reps: data.reps,
+        },
+      });
       return {
         data: response.data,
       };
