@@ -1,0 +1,23 @@
+.login-button,
+.signup-button {
+  text-decoration: none;
+  color: black;
+}
+.login-button {
+  margin-right: 10px;
+}
+.login-button:hover,
+.signup-button:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.forgot-password-btn {
+  margin-left: 10px;
+  color: black;
+  text-decoration: none;
+}
+.forgot-password-btn:hover {
+  cursor: pointer;
+  text-decoration: underline;
+}
