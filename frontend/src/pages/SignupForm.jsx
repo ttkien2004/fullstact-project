@@ -1,16 +1,33 @@
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
+import useSignup from "../hooks/useSignup";
+import { useNavigate } from "react-router-dom";
+import { Toast } from "primereact/toast";
 
 const SignupForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { signup, error, setError } = useSignup();
+  const navigate = useNavigate();
+  const toast = useRef(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log("Signup successfully");
+    signup(username, password);
+    if (!error) {
+      console.log("Signup successfully");
+      navigate("/");
+    } else {
+      toast.current.show({
+        severity: "error",
+        summary: "signup-failed",
+        detail: "Đăng ký thất bại",
+        life: 3000,
+      });
+    }
   };
   return (
     <div
@@ -20,6 +37,7 @@ const SignupForm = () => {
         paddingTop: "100px",
       }}
     >
+      <Toast ref={toast} />
       <form
         style={{
           width: "500px",

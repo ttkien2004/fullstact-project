@@ -7,13 +7,20 @@ import { Paginator } from "primereact/paginator";
 import { Dialog } from "primereact/dialog";
 import { InputTextarea } from "primereact/inputtextarea";
 import "./style.css";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import blogAPI from "../services/blog";
+import moment from "moment";
+import { Toast } from "primereact/toast";
+import { useAuthContext } from "../hooks/useAuthContext";
 
 const BlogContainer = () => {
   const [first, setFirst] = useState(0);
-  const [rows, setRows] = useState(4);
+  const [rows, setRows] = useState(5);
   const [openDialog, setOpenDialog] = useState(false);
   const [contents, setContents] = useState("");
+  const [blogContainer, setBlogContainer] = useState([]);
+  const toast = useRef(null);
+  const { user } = useAuthContext();
 
   const blogs = [
     {
@@ -46,6 +53,32 @@ const BlogContainer = () => {
     },
   ];
 
+  // handle submit new blog
+  const handleSubmitNewBlog = async () => {
+    try {
+      const res = await blogAPI.createBlog("Kien Tran", contents);
+
+      if (res) {
+        console.log(res.data.data);
+        setBlogContainer([res.data.data, ...blogContainer]);
+        setContents("");
+        toast.current.show({
+          severity: "success",
+          detail: "Tạo blog mới thành công",
+          summary: "success-create",
+          life: 3000,
+        });
+      }
+    } catch (err) {
+      console.log(err.error);
+      toast.current.show({
+        severity: "error",
+        summary: "error-create",
+        detail: "Tạo blog mới thất bại",
+        life: 3000,
+      });
+    }
+  };
   // slice blogs for current pages
   const currentBlogs = blogs.slice(first, first + rows);
 
@@ -77,13 +110,37 @@ const BlogContainer = () => {
         <Button
           label="Tạo"
           severity="info"
-          onClick={() => setOpenDialog(false)}
+          onClick={() => {
+            setOpenDialog(false);
+            handleSubmitNewBlog();
+          }}
         ></Button>
       </>
     );
   };
+
+  // fetch data from database
+  useEffect(() => {
+    console.log(user);
+    if (user) {
+      blogAPI
+        .getAll()
+        .then((res) => {
+          console.log(res.data.data);
+          setBlogContainer(res.data.data);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      console.log("no");
+    }
+  }, [user]);
+  // slice blogs for current pages
+  const currentBlogContainer = blogContainer.slice(first, first + rows);
   return (
     <>
+      <Toast ref={toast} />
       <h1 style={{ marginLeft: "50px" }}>Blog của tôi</h1>
       {/* Chứa nút tạo blog */}
       <div className="blog-container">
@@ -92,10 +149,12 @@ const BlogContainer = () => {
         </Card>
         {/* Chứa các blog */}
         <div className="blogs">
-          {currentBlogs.map((cont, index) => (
+          {currentBlogContainer.map((cont, index) => (
             <Panel
               key={index}
-              header={`Nhật ký ngày ${cont.createdAt}`}
+              header={`Nhật ký ngày ${moment(cont.createdAt).format(
+                "YYYY-MM-DD"
+              )}`}
               style={{ marginBottom: "30px" }}
               toggleable
             >
@@ -108,7 +167,7 @@ const BlogContainer = () => {
         <Paginator
           first={first}
           rows={rows}
-          totalRecords={blogs.length}
+          totalRecords={blogContainer.length}
           rowsPerPageOptions={[5, 10, 15]}
           onPageChange={onPageChange}
         ></Paginator>

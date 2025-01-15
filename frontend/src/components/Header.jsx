@@ -1,7 +1,24 @@
 import "./style.css";
 import { Link } from "react-router-dom";
+import { useAuthContext } from "../hooks/useAuthContext";
+import { Button } from "primereact/button";
+import { useEffect, useState } from "react";
+import useLogout from "../hooks/useLogout";
 
 const Header = () => {
+  const [username, setUsername] = useState("");
+  const { user } = useAuthContext();
+  const { logout } = useLogout();
+
+  const handleLogout = () => {
+    logout();
+  };
+  useEffect(() => {
+    if (user) {
+      setUsername(user.username.split("@")[0]);
+    }
+  }, []);
+
   return (
     <div
       style={{
@@ -32,12 +49,25 @@ const Header = () => {
           marginRight: "100px",
         }}
       >
-        <Link className="login-button" to={"/login"}>
-          Đăng nhập
-        </Link>
-        <Link className="signup-button" to={"/signup"}>
-          Đăng ký
-        </Link>
+        {user ? (
+          <div style={{ display: "flex", alignItems: "center" }}>
+            {
+              <span style={{ fontWeight: "800", marginRight: "10px" }}>
+                {username}
+              </span>
+            }
+            <Button label="Đăng xuất" outlined onClick={handleLogout}></Button>
+          </div>
+        ) : (
+          <div>
+            <Link className="login-button" to={"/login"}>
+              Đăng nhập
+            </Link>
+            <Link className="signup-button" to={"/signup"}>
+              Đăng ký
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );

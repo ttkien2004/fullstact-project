@@ -1,16 +1,38 @@
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Link } from "react-router-dom";
+import useLogin from "../hooks/useLogin";
+import { Toast } from "primereact/toast";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const toast = useRef(null);
+  const { login, error, setError } = useLogin();
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    console.log("Login successfully");
+    login(username, password);
+    if (!error) {
+      toast.current.show({
+        severity: "success",
+        summary: "login-success",
+        detail: "Đăng nhập thành công",
+        life: 3000,
+      });
+      navigate("/");
+    } else {
+      toast.current.show({
+        severity: "error",
+        summary: "login-failed",
+        detail: "Đăng nhập thất bại",
+        life: 3000,
+      });
+    }
   };
   return (
     <div
@@ -20,6 +42,7 @@ const LoginForm = () => {
         paddingTop: "100px",
       }}
     >
+      <Toast ref={toast} />
       <form
         style={{
           width: "500px",
@@ -56,7 +79,9 @@ const LoginForm = () => {
               id="username"
               type="text"
               value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              onChange={(e) => {
+                setUsername(e.target.value), setError("");
+              }}
             ></InputText>
           </div>
           {/* Mật khẩu */}
@@ -77,7 +102,9 @@ const LoginForm = () => {
               id="password"
               type="password"
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value), setError("");
+              }}
             ></InputText>
           </div>
         </div>
@@ -95,6 +122,12 @@ const LoginForm = () => {
             Chưa có tài khoản?
           </Link>
         </div>
+        {/* Kiểm tra có lỗi hay không */}
+        {error && (
+          <div style={{ color: "red", marginLeft: "50px", marginTop: "20px" }}>
+            {error}
+          </div>
+        )}
       </form>
     </div>
   );
