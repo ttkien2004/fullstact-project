@@ -15,9 +15,10 @@ const Header = () => {
   };
   useEffect(() => {
     if (user) {
+      // console.log(user.username.split("@")[0]);
       setUsername(user.username.split("@")[0]);
     }
-  }, []);
+  }, [user]);
 
   return (
     <div

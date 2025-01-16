@@ -13,26 +13,28 @@ const LoginForm = () => {
   const { login, error, setError } = useLogin();
   const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    login(username, password);
-    if (!error) {
-      toast.current.show({
-        severity: "success",
-        summary: "login-success",
-        detail: "Đăng nhập thành công",
-        life: 3000,
-      });
-      navigate("/");
-    } else {
-      toast.current.show({
-        severity: "error",
-        summary: "login-failed",
-        detail: "Đăng nhập thất bại",
-        life: 3000,
-      });
-    }
+    await login(username, password);
+    // if (!error) {
+    //   console.log("ues");
+    //   toast.current.show({
+    //     severity: "success",
+    //     summary: "login-success",
+    //     detail: "Đăng nhập thành công",
+    //     life: 3000,
+    //   });
+    //   navigate("/");
+    // } else {
+    //   console.log("no");
+    //   toast.current.show({
+    //     severity: "error",
+    //     summary: "login-failed",
+    //     detail: "Đăng nhập thất bại",
+    //     life: 3000,
+    //   });
+    // }
   };
   return (
     <div

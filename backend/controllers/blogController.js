@@ -3,8 +3,10 @@ const mongoose = require("mongoose");
 
 // get all blogs
 const getAllBlogs = async (req, res) => {
+  console.log(req.user._id);
   try {
-    const blogs = await BlogModel.find().sort({
+    const user_id = req.user._id;
+    const blogs = await BlogModel.find({ user_id }).sort({
       createdAt: -1,
     });
     res.status(200).json(blogs);
@@ -30,11 +32,13 @@ const deleteBlog = async (req, res) => {
 // create new blog
 const createNewBlog = async (req, res) => {
   const { author, contents } = req.body;
+  //console.log(author, contents);
   if (!author || !contents) {
     res.status(400).json({ error: "These fields must be filled" });
   }
   try {
-    const newBlog = await BlogModel.create({ author, contents });
+    const user_id = req.user._id;
+    const newBlog = await BlogModel.create({ author, contents, user_id });
     res.status(200).json({ data: newBlog });
   } catch (err) {
     res.status(400).json({ error: err.message });

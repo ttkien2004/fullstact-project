@@ -11,6 +11,7 @@ const authAPI = {
         data: response.data,
       };
     } catch (err) {
+      // console.log(err.response.data);
       throw err.response.data;
     }
   },
@@ -24,8 +25,8 @@ const authAPI = {
         data: response.data,
       };
     } catch (err) {
-      console.log(err.response.data);
-      throw err.response.data;
+      console.log(err.error);
+      throw err;
     }
   },
 };

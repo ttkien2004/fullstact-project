@@ -9,10 +9,21 @@ const axiosClient = axios.create({
   },
 });
 
-// axiosClient.interceptors.request.use(
-//     (config) => {
-//         const token = loca
-//     }
-// )
+axiosClient.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("user");
+
+    if (token) {
+      console.log("yes");
+      const tokenString = JSON.parse(token).token;
+      console.log(tokenString);
+      config.headers.Authorization = `Bearer ${tokenString}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 export default axiosClient;

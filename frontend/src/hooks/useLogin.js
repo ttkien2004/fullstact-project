@@ -15,7 +15,7 @@ const useLogin = () => {
         dispatch({ type: "LOGIN", payload: response.data.data });
       }
     } catch (err) {
-      console.log(err);
+      // console.log(err.error);
       setError(err.error);
     }
   };
