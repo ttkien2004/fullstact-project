@@ -1,0 +1,22 @@
+.login-form,
+.signup-form {
+	display: flex;
+	flex-direction: column;
+	width: 450px;
+	height: 450px;
+	border-radius: 10px;
+	box-shadow: 0 4px 8px 4px rgba(0, 0, 0, 0.05);
+	padding-left: 20px;
+	padding-right: 20px;
+}
+
+/* chat dashboard */
+.mini-icon {
+	color: #a5bfcc;
+	transition: background-color 0.1s;
+}
+.mini-icon:hover {
+	background-color: #78b3ce;
+	color: white;
+	cursor: pointer;
+}
