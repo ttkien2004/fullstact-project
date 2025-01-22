@@ -251,7 +251,6 @@ const ChatDashboard = () => {
 						{/* Place to render the message */}
 						<div
 							style={{
-								border: "1px solid blue",
 								height: "450px",
 								overflowY: "auto",
 							}}
