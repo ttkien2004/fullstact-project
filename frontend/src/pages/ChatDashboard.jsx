@@ -52,7 +52,6 @@ const ChatDashboard = () => {
 		<div
 			style={{
 				display: "flex",
-				border: "1px solid red",
 				justifyContent: "center",
 				alignItems: "center",
 				flexGrow: 1,
@@ -66,7 +65,9 @@ const ChatDashboard = () => {
 					height: "600px",
 					display: "flex",
 					flexDirection: "row",
-					border: "1px solid blue",
+					border: "1px solid black",
+					borderRadius: "15px",
+					boxShadow: "0px 4px 8px 4px rgba(0,0,0,0.05)",
 				}}
 			>
 				{/* mini sidebar */}
@@ -239,13 +240,10 @@ const ChatDashboard = () => {
 					{/* place to chat */}
 					<div
 						style={{
-							border: "1px solid red",
 							backgroundColor: "#F8FAFC",
 							flexGrow: 1,
 							borderRadius: "10px",
 							marginTop: "10px",
-							display: "flex",
-							flexDirection: "column",
 							paddingLeft: "20px",
 							paddingRight: "20px",
 						}}
@@ -254,9 +252,21 @@ const ChatDashboard = () => {
 						<div
 							style={{
 								border: "1px solid blue",
-								flexGrow: 1,
+								height: "450px",
+								overflowY: "auto",
 							}}
-						></div>
+						>
+							<div
+								style={{
+									display: "flex",
+									alignItems: "center",
+									marginLeft: "10px",
+								}}
+							>
+								<i className="pi pi-user receiver-icon"></i>
+								<p className="render-message-content">Hello askjdasjdasdl</p>
+							</div>
+						</div>
 						{/* Place to type message */}
 						<div
 							style={{

@@ -3,9 +3,14 @@ import { InputText } from "primereact/inputtext";
 import { useNavigate } from "react-router-dom";
 import { Password } from "primereact/password";
 import "./style.css";
+import useSignup from "../hooks/useSignup";
+import { useState } from "react";
 
 const SignupForm = () => {
 	const navigate = useNavigate();
+	const { signup, error, setError } = useSignup();
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
 	return (
 		<div
 			style={{
@@ -31,6 +36,10 @@ const SignupForm = () => {
 						type="text"
 						id="username-input"
 						placeholder="username"
+						value={email}
+						onChange={(e) => {
+							setEmail(e.target.value), setError("");
+						}}
 					></InputText>
 				</div>
 				{/* password input */}
@@ -43,7 +52,15 @@ const SignupForm = () => {
 					}}
 				>
 					<label htmlFor="password-input">Password</label>
-					<Password toggleMask></Password>
+					<InputText
+						id="password-input"
+						type="password"
+						placeholder="password"
+						value={password}
+						onChange={(e) => {
+							setPassword(e.target.value), setError("");
+						}}
+					></InputText>
 				</div>
 				{/* button to submit */}
 				<Button label="Login" style={{ marginTop: "50px" }}></Button>
@@ -56,6 +73,10 @@ const SignupForm = () => {
 						Don't have an account?
 					</div>
 				</div>
+				{/* Render error message */}
+				<small style={{ color: "red", fontSize: "20px", marginTop: "15px" }}>
+					{error}
+				</small>
 			</form>
 		</div>
 	);

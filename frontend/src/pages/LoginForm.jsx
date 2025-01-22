@@ -2,10 +2,21 @@ import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { useNavigate } from "react-router-dom";
 import { Password } from "primereact/password";
+import useLogin from "../hooks/useLogin";
+import { useState } from "react";
 import "./style.css";
 
 const LoginForm = () => {
 	const navigate = useNavigate();
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const { login, error, setError } = useLogin();
+
+	const handleLogin = async (e) => {
+		e.preventDefault();
+
+		await login(email, password);
+	};
 	return (
 		<div
 			style={{
@@ -15,7 +26,7 @@ const LoginForm = () => {
 				alignItems: "center",
 			}}
 		>
-			<form className="login-form">
+			<form className="login-form" onSubmit={handleLogin}>
 				<h1>Login</h1>
 				{/* username input */}
 				<div
@@ -31,6 +42,10 @@ const LoginForm = () => {
 						type="text"
 						id="username-input"
 						placeholder="username"
+						value={email}
+						onChange={(e) => {
+							setEmail(e.target.value), setError("");
+						}}
 					></InputText>
 				</div>
 				{/* password input */}
@@ -47,6 +62,10 @@ const LoginForm = () => {
 						id="password-input"
 						type="password"
 						placeholder="password"
+						value={password}
+						onChange={(e) => {
+							setPassword(e.target.value), setError("");
+						}}
 					></InputText>
 				</div>
 				{/* button to submit */}
@@ -60,6 +79,10 @@ const LoginForm = () => {
 						Don't have an account?
 					</div>
 				</div>
+				{/* Render error */}
+				<small style={{ color: "red", marginTop: "10px", fontSize: "20px" }}>
+					{error}
+				</small>
 			</form>
 		</div>
 	);

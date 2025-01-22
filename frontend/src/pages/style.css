@@ -20,3 +20,23 @@
 	color: white;
 	cursor: pointer;
 }
+
+.receiver-icon {
+	height: 30px;
+	width: 30px;
+	border-radius: 50%;
+	background-color: #6a80b9;
+	color: white;
+	align-content: center;
+	padding-left: 7px;
+}
+.render-message-content {
+	width: max-content;
+	padding: 10px;
+	border-radius: 15px;
+	background-color: C4D9FF;
+	color: #155e95;
+	font-weight: 700;
+	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
+	margin-left: 15px;
+}
