@@ -7,9 +7,9 @@ const authAPI = {
 				email,
 				password,
 			});
-			return response.data;
+			return { data: response.data };
 		} catch (err) {
-			return err.response.data;
+			throw err.response.data;
 		}
 	},
 	signup: async (email, password) => {
@@ -18,9 +18,9 @@ const authAPI = {
 				email,
 				password,
 			});
-			return response.data;
+			return { data: response.data };
 		} catch (err) {
-			return err.response.data;
+			throw err.response.data;
 		}
 	},
 };

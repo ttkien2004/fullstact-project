@@ -3,10 +3,48 @@ import { InputText } from "primereact/inputtext";
 import { IconField } from "primereact/iconfield";
 import { InputIcon } from "primereact/inputicon";
 import { Button } from "primereact/button";
+import { useEffect, useState } from "react";
 
 import "./style.css";
+import conversationApi from "../services/conversation";
+import messageAPI from "../services/message";
+import useAuthContext from "../hooks/useAuthContext";
 
-const ChatDashboard = () => {
+const ChatDashboard = ({ socket }) => {
+	const [userList, setUserList] = useState([]);
+	const [chatInitiated, setChatInitiated] = useState(false);
+	const [receiverId, setReceiverId] = useState("");
+	const [content, setContent] = useState("");
+	const [chats, setChats] = useState([]);
+	const { user } = useAuthContext();
+
+	const startChat = async (id) => {
+		console.log(id);
+		try {
+			const response = await messageAPI.getMessages(id);
+
+			console.log(chats);
+			setChats(response.data.data);
+		} catch (err) {
+			if (err.error === "Not found") {
+				setChats([]);
+			}
+			console.log(err);
+		}
+		socket.emit("join", id);
+		setChatInitiated(true);
+	};
+	const handleCreateMessage = async () => {
+		try {
+			const response = await messageAPI.createMessage(receiverId, content);
+			if (response) {
+				// console.log(response.data.data);
+				setChats([...chats, response.data.data]);
+			}
+		} catch (err) {
+			console.log(err.error);
+		}
+	};
 	const icons = [
 		{
 			name: "pi pi-home",
@@ -27,27 +65,19 @@ const ChatDashboard = () => {
 			name: "pi pi-cog",
 		},
 	];
-	const users = [
-		{
-			avatar: "pi pi-user",
-			name: "Ali Arnold",
-			message:
-				"Hello0000000000000000000000000000000000000000000000000000000000000000",
-			sendDate: "10-02-2024",
-		},
-		{
-			avatar: "pi pi-user",
-			name: "Kien Tran",
-			message: "Hello",
-			sendDate: "10-02-2024",
-		},
-		{
-			avatar: "pi pi-user",
-			name: "Cindy Arui",
-			message: "Hello",
-			sendDate: "10-02-2024",
-		},
-	];
+
+	useEffect(() => {
+		conversationApi
+			.getConverseList()
+			.then((res) => {
+				// console.log(res.data.data);
+				setUserList(res.data.data);
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+		setChats([]);
+	}, []);
 	return (
 		<div
 			style={{
@@ -121,7 +151,7 @@ const ChatDashboard = () => {
 						></InputText>
 					</IconField>
 					{/* user lists */}
-					{users.map((user, index) => (
+					{userList.map((userr, index) => (
 						<div
 							key={index}
 							style={{
@@ -131,6 +161,12 @@ const ChatDashboard = () => {
 								marginBottom: "20px",
 								alignItems: "center",
 								boxShadow: "0 4px 8px 4px rgba(0,0,0,0.1)",
+							}}
+							className="user-container-hover"
+							onClick={() => {
+								setChats([]);
+								setReceiverId(userr._id);
+								startChat(userr._id);
 							}}
 						>
 							{/* avatar */}
@@ -147,7 +183,7 @@ const ChatDashboard = () => {
 									marginRight: "10px",
 								}}
 							>
-								<i className={user.avatar} style={{ fontSize: "20px" }}></i>
+								<i className="pi pi-user" style={{ fontSize: "20px" }}></i>
 							</div>
 							{/* name, message, date */}
 							<div
@@ -161,8 +197,16 @@ const ChatDashboard = () => {
 								}}
 							>
 								<div>
-									{user.name}{" "}
-									<span style={{ fontSize: "12px" }}>{user.sendDate}</span>
+									{userr.email.split("@")[0]}{" "}
+									<span
+										style={{
+											fontSize: "10px",
+											marginLeft: "10px",
+											color: "rgb(180,180,180)",
+										}}
+									>
+										{"12-12-2012"}
+									</span>
 								</div>
 								<p
 									style={{
@@ -173,7 +217,7 @@ const ChatDashboard = () => {
 										color: "rgb(187, 187, 187)",
 									}}
 								>
-									{user.message}
+									{"Hello"}
 								</p>
 							</div>
 						</div>
@@ -255,16 +299,20 @@ const ChatDashboard = () => {
 								overflowY: "auto",
 							}}
 						>
-							<div
-								style={{
-									display: "flex",
-									alignItems: "center",
-									marginLeft: "10px",
-								}}
-							>
-								<i className="pi pi-user receiver-icon"></i>
-								<p className="render-message-content">Hello askjdasjdasdl</p>
-							</div>
+							{chats.map((chat, index) =>
+								chat.sender === user.userId ? (
+									<div className="sender-message-container" key={index}>
+										<p className="render-message-content">{chat.content}</p>
+									</div>
+								) : (
+									<div className="receiver-message-container" key={index}>
+										<i className="pi pi-user receiver-icon"></i>
+										<p className="render-message-content">{chat.content}</p>
+									</div>
+								)
+							)}
+							{/* receiver */}
+							{/* sender - user */}
 						</div>
 						{/* Place to type message */}
 						<div
@@ -277,8 +325,17 @@ const ChatDashboard = () => {
 							<InputText
 								placeholder="Message..."
 								style={{ width: "100%", marginRight: "10px" }}
+								value={content}
+								onChange={(e) => setContent(e.target.value)}
 							></InputText>
-							<Button icon="pi pi-arrow-up" severity="secondary"></Button>
+							<Button
+								icon="pi pi-arrow-up"
+								severity="secondary"
+								onClick={() => {
+									handleCreateMessage(receiverId, content);
+									setContent("");
+								}}
+							></Button>
 						</div>
 					</div>
 				</div>

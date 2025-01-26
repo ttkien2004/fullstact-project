@@ -8,9 +8,11 @@ const useLogin = () => {
 	const login = async (email, password) => {
 		try {
 			const response = await authAPI.login(email, password);
-			console.log(response);
-			localStorage.setItem("user", JSON.stringify({ ...response }));
-			dispatch({ type: "LOGIN", payload: response });
+			console.log(response.data);
+			if (response) {
+				localStorage.setItem("user", JSON.stringify({ ...response.data }));
+				dispatch({ type: "LOGIN", payload: response.data });
+			}
 		} catch (err) {
 			console.log(err.error);
 			setError(err.error);

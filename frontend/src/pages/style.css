@@ -40,3 +40,19 @@
 	box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5);
 	margin-left: 15px;
 }
+
+.receiver-message-container {
+	display: flex;
+	align-items: center;
+	margin-left: 10px;
+}
+.sender-message-container {
+	display: flex;
+	align-items: center;
+	justify-content: end;
+	margin-right: 10px;
+}
+
+.user-container-hover:hover {
+	background-color: rgb(245, 245, 245);
+}

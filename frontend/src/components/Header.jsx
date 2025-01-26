@@ -32,7 +32,7 @@ const Header = () => {
 							fontWeight: "bolder",
 						}}
 					>
-						{user.email.split("@")[0]}
+						{user.email && user.email.split("@")[0]}
 					</p>
 					<Button label="Đăng xuất" outlined onClick={handleLogout}></Button>
 				</div>

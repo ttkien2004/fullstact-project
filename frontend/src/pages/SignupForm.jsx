@@ -11,6 +11,12 @@ const SignupForm = () => {
 	const { signup, error, setError } = useSignup();
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
+
+	const handleSignup = async (e) => {
+		e.preventDefault();
+
+		await signup(email, password);
+	};
 	return (
 		<div
 			style={{
@@ -20,7 +26,7 @@ const SignupForm = () => {
 				alignItems: "center",
 			}}
 		>
-			<form className="signup-form">
+			<form className="signup-form" onSubmit={handleSignup}>
 				<h1>Signup</h1>
 				{/* username input */}
 				<div
@@ -63,14 +69,13 @@ const SignupForm = () => {
 					></InputText>
 				</div>
 				{/* button to submit */}
-				<Button label="Login" style={{ marginTop: "50px" }}></Button>
+				<Button label="sign up" style={{ marginTop: "50px" }}></Button>
 				<div style={{ display: "flex", fontSize: "13px", marginTop: "10px" }}>
-					<div style={{ cursor: "pointer" }}>Forgot password?</div>
 					<div
 						style={{ marginLeft: "5px", cursor: "pointer" }}
-						onClick={() => navigate("/signup")}
+						onClick={() => navigate("/login")}
 					>
-						Don't have an account?
+						Already have an account?
 					</div>
 				</div>
 				{/* Render error message */}

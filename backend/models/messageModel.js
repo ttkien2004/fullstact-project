@@ -6,11 +6,16 @@ const messageSchema = new schema(
 	{
 		conversationID: {
 			type: mongoose.Schema.Types.ObjectId,
-			ref: "User",
+			ref: "conversations",
 			required: true,
 		},
 		content: {
 			type: String,
+			required: true,
+		},
+		sender: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "users",
 			required: true,
 		},
 	},

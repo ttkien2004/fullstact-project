@@ -1,7 +1,6 @@
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { useNavigate } from "react-router-dom";
-import { Password } from "primereact/password";
 import useLogin from "../hooks/useLogin";
 import { useState } from "react";
 import "./style.css";
@@ -80,9 +79,11 @@ const LoginForm = () => {
 					</div>
 				</div>
 				{/* Render error */}
-				<small style={{ color: "red", marginTop: "10px", fontSize: "20px" }}>
-					{error}
-				</small>
+				{error && (
+					<small style={{ color: "red", marginTop: "10px", fontSize: "20px" }}>
+						{error}
+					</small>
+				)}
 			</form>
 		</div>
 	);

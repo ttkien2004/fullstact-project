@@ -6,6 +6,9 @@ import SignupForm from "./pages/SignupForm";
 import DefaultLayout from "./components/DefaultLayout";
 import ChatDashboard from "./pages/ChatDashboard";
 import useAuthContext from "./hooks/useAuthContext";
+import io from "socket.io-client";
+
+const socket = io.connect("http://localhost:3000");
 
 function App() {
 	const { user } = useAuthContext();
@@ -17,7 +20,13 @@ function App() {
 					{/* Nested routes rendered via Outlet */}
 					<Route
 						path="chat"
-						element={user ? <ChatDashboard /> : <Navigate to={"/login"} />}
+						element={
+							user ? (
+								<ChatDashboard socket={socket} />
+							) : (
+								<Navigate to={"/login"} />
+							)
+						}
 					></Route>
 					<Route
 						path="login"
