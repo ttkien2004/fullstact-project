@@ -39,6 +39,7 @@
 - Create a .env file in backend folder
 - On MongoDB, create a new database and a new cluster, then copy your MONGO_URI of your database that you have created.
 - Add these lines:
-  - PORT=3000
-  - MONGO_URI=mongodb+srv://<your_account_on_mongodb>:<your_database_password>@blog-mern.asxbd.mongodb.net/?retryWrites=true&w=majority&appName=Blog-mern&ssl=true
-  - SECRET=treconsamactruyentainhaubaidongdaosdffasdasddasda
+  ```bash
+  PORT=3000
+  MONGO_URI=mongodb+srv://<your_account_on_mongodb>:<your_database_password>@blog-mern.asxbd.mongodb.net/?retryWrites=true&w=majority&appName=Blog-mern&ssl=true
+  SECRET=treconsamactruyentainhaubaidongdaosdffasdasddasda
